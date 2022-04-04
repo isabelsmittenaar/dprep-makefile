@@ -1,17 +1,17 @@
-all: plot_Antwerp.pdf plot_all.pdf
+all: output/plot_Antwerp.pdf output/plot_all.pdf
 
-reviews.csv listings.csv: download.R
-	R --vanilla < download.R
+data/reviews.csv data/listings.csv: src/download.R
+	R --vanilla < src/download.R
 
-aggregated_df.csv: reviews.csv listings.csv clean.R
-	R --vanilla < clean.R
+temp/aggregated_df.csv: data/reviews.csv data/listings.csv src/clean.R
+	R --vanilla < src/clean.R
 	
-pivot_table.csv: aggregated_df.csv pivot.R
-	R --vanilla < pivot.R
+temp/pivot_table.csv: temp/aggregated_df.csv src/pivot.R
+	R --vanilla < src/pivot.R
 	
-plot_Antwerp.pdf: pivot_table.csv plot_antwerp.R
-	R --vanilla < plot_antwerp.R
+output/plot_Antwerp.pdf: temp/pivot_table.csv src/plot_antwerp.R
+	R --vanilla < src/plot_antwerp.R
 	
-plot_all.pdf: plot_all.R aggregated_df.csv
-	R --vanilla < plot_all.R 
+output/plot_all.pdf: src/plot_all.R temp/aggregated_df.csv
+	R --vanilla < src/plot_all.R 
 	
